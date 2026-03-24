@@ -4,7 +4,7 @@ FastAPI Backend For Insta-Motions. Analyzes Instagram Post Sentiments And Genera
 
 ## How It Works
 
-You Upload An Excel File With Instagram Post Data, And It Runs Sentiment Analysis On Every Caption And Comment Using A Pre-Trained RoBERTa Model. It Also Crunches Profile-Level Statistics Like Engagement Trends, Sentiment Distribution, And Top Posts.
+Upload An Excel File With Instagram Post Data, And It Runs Sentiment Analysis On Every Caption And Comment Using A Pre-Trained RoBERTa Model. It Also Crunches Profile-Level Statistics Like Engagement Trends, Sentiment Distribution, And Top Posts.
 
 ## Setup
 
