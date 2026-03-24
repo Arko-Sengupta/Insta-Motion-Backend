@@ -137,6 +137,8 @@ async def AnalyzeFromFile(FileUpload: UploadFile = File(...)):
         Logger.error("Error Processing Uploaded File", exc_info=e)
         raise HTTPException(status_code=400, detail="An Unexpected Error Occurred While Processing The File. Please Try Again.")
 
+app = App
+
 if __name__ == "__main__":
     try:
         import uvicorn
