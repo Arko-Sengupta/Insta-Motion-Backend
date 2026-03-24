@@ -13,7 +13,7 @@ load_dotenv()
 
 Logger = logging.getLogger(__name__)
 MODEL_NAME = "cardiffnlp/twitter-roberta-base-sentiment"
-HF_API_URL = f"https://api-inference.huggingface.co/models/{MODEL_NAME}"
+HF_API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL_NAME}"
 HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 
 
