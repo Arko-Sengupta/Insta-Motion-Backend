@@ -1,40 +1,41 @@
 from __future__ import annotations
 
+import os
 import re
 import ast
 import logging
 import pandas as pd
 
-from scipy.special import softmax
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 Logger = logging.getLogger(__name__)
 MODEL_NAME = "cardiffnlp/twitter-roberta-base-sentiment"
-
-Tokenizer = None
-Model = None
-
-
-def LoadModel():
-    global Tokenizer, Model
-    try:
-        if Tokenizer is None or Model is None:
-            Logger.info("Loading Model: %s", MODEL_NAME)
-            Tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-            Model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-            Logger.info("Model Loaded Successfully")
-    except Exception as e:
-        Logger.error("Failed To Load Model", exc_info=e)
-        raise e
+HF_API_URL = f"https://api-inference.huggingface.co/models/{MODEL_NAME}"
+HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 
 
 def ClassifyText(Text: str) -> list[float]:
     try:
-        LoadModel()
-        Encoded = Tokenizer(Text, return_tensors="pt", truncation=True, max_length=512)
-        Output = Model(**Encoded)
-        Scores = Output.logits[0].detach().numpy()
-        return softmax(Scores).tolist()
+        Headers = {"Authorization": f"Bearer {HF_API_TOKEN}"} if HF_API_TOKEN else {}
+        Response = requests.post(HF_API_URL, headers=Headers, json={"inputs": Text})
+        Response.raise_for_status()
+
+        Result = Response.json()
+
+        if isinstance(Result, list) and isinstance(Result[0], list):
+            Result = Result[0]
+
+        LabelMap = {"LABEL_0": 0, "LABEL_1": 1, "LABEL_2": 2}
+        Scores = [0.0, 0.0, 0.0]
+        for Item in Result:
+            Index = LabelMap.get(Item["label"])
+            if Index is not None:
+                Scores[Index] = Item["score"]
+
+        return Scores
     except Exception as e:
         Logger.error("Error In Text Classification", exc_info=e)
         raise e
