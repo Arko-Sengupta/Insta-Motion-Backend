@@ -16,7 +16,7 @@ from Tools.SentimentAnalyzer import AnalyzePosts
 from Tools.ProfileInsights import GenerateProfileInsights
 
 load_dotenv()
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
 
 logging.basicConfig(
     level=logging.INFO,
