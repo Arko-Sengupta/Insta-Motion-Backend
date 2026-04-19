@@ -19,7 +19,6 @@ HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 BATCH_SIZE = 32
 MAX_WORKERS = 8
 
-
 def ClassifyBatch(Texts: list[str]) -> list[list[float]]:
     try:
         Headers = {"Authorization": f"Bearer {HF_API_TOKEN}"} if HF_API_TOKEN else {}
@@ -36,13 +35,15 @@ def ClassifyBatch(Texts: list[str]) -> list[list[float]]:
                 Index = LabelMap.get(Item["label"])
                 if Index is not None:
                     S[Index] = Item["score"]
+            Total = sum(S)
+            if Total > 0:
+                S = [round(V / Total, 6) for V in S]
             Scores.append(S)
 
         return Scores
     except Exception as e:
         Logger.error("Error In Batch Text Classification", exc_info=e)
         raise e
-
 
 def ClassifyAll(Texts: list[str]) -> list[list[float]]:
     Batches = [Texts[i:i + BATCH_SIZE] for i in range(0, len(Texts), BATCH_SIZE)]
@@ -56,7 +57,6 @@ def ClassifyAll(Texts: list[str]) -> list[list[float]]:
 
     return [Score for Batch in Results for Score in Batch]
 
-
 def RefineText(Text: str) -> str:
     try:
         Text = re.sub(r"@\w*", "", Text)
@@ -67,7 +67,6 @@ def RefineText(Text: str) -> str:
     except Exception as e:
         Logger.error("Error In Text Refinement", exc_info=e)
         raise e
-
 
 def ParseComments(Comments) -> list[str]:
     try:
@@ -81,14 +80,12 @@ def ParseComments(Comments) -> list[str]:
         Logger.error("Error In Parsing Comments", exc_info=e)
         raise e
 
-
 def ClassifyTexts(Texts: list[str]) -> dict[str, list[float]]:
     UniqueTexts = list({T for T in Texts if T.strip()})
     Labels = ClassifyAll(UniqueTexts)
     TextLabelMap = dict(zip(UniqueTexts, Labels))
     Default = [0.0, 1.0, 0.0]
     return {T: TextLabelMap.get(T, Default) for T in Texts}
-
 
 def AnalyzePosts(Data: list[dict]) -> list[dict]:
     try:
