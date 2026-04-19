@@ -27,7 +27,6 @@ def CalculateOverallSentiment(Posts: list[dict]) -> dict:
         Logger.error("Error In Calculating Overall Sentiment", exc_info=e)
         raise e
 
-
 def CalculateEngagementMetrics(Posts: list[dict]) -> dict:
     try:
         TotalPosts = len(Posts)
@@ -64,7 +63,6 @@ def CalculateEngagementMetrics(Posts: list[dict]) -> dict:
         Logger.error("Error In Calculating Engagement Metrics", exc_info=e)
         raise e
 
-
 def CalculateSentimentTrend(Posts: list[dict]) -> list[dict]:
     try:
         Trend = []
@@ -85,7 +83,6 @@ def CalculateSentimentTrend(Posts: list[dict]) -> list[dict]:
     except Exception as e:
         Logger.error("Error In Calculating Sentiment Trend", exc_info=e)
         raise e
-
 
 def CalculateEngagementSentimentCorrelation(Posts: list[dict]) -> list[dict]:
     try:
@@ -109,7 +106,6 @@ def CalculateEngagementSentimentCorrelation(Posts: list[dict]) -> list[dict]:
     except Exception as e:
         Logger.error("Error In Calculating Engagement Sentiment Correlation", exc_info=e)
         raise e
-
 
 def CalculateCommentsSentimentSummary(Posts: list[dict]) -> dict:
     try:
@@ -156,7 +152,6 @@ def CalculateCommentsSentimentSummary(Posts: list[dict]) -> dict:
         Logger.error("Error In Calculating Comments Sentiment Summary", exc_info=e)
         raise e
 
-
 def CalculateTopPosts(Posts: list[dict]) -> dict:
     try:
         if not Posts:
@@ -186,7 +181,6 @@ def CalculateTopPosts(Posts: list[dict]) -> dict:
     except Exception as e:
         Logger.error("Error In Calculating Top Posts", exc_info=e)
         raise e
-
 
 def GenerateProfileInsights(Posts: list[dict]) -> dict:
     try:
